@@ -4,14 +4,14 @@ import re
 from openai import OpenAI
 
 # Configuration: Define files and the AI model version
-INPUT_CSV = "input.csv"
-OUTPUT_CSV = "output.csv"
+INPUT_CSV = "claim_eval_input.csv"
+OUTPUT_CSV = "claim_eval_output.csv"
 MODEL = "gpt-4.1-mini"
 
 client = OpenAI()
 
 # System Instructions: These set the "rules" for the AI's behavior
-INSTRUCTIONS = (
+SYSTEM_INSTRUCTIONS = (
     "You are reviewing a patent claim limitation against a reference excerpt.\n"
     "Decide whether the excerpt discloses the limitation.\n"
     "Use ONLY the excerpt as evidence.\n\n"
@@ -66,9 +66,9 @@ def call_model(prompt: str) -> str:
     """Executes the API call to OpenAI with temperature 0 for consistency."""
     resp = client.responses.create(
         model=MODEL,
-        instructions=INSTRUCTIONS,
+        instructions=SYSTEM_INSTRUCTIONS,
         input=prompt,
-        # make it more deterministic / compliant
+        # Use low temperature for more consistent stuctured output
         temperature=0,
     )
     return getattr(resp, "output_text", "").strip()
