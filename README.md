@@ -13,7 +13,7 @@ The dataset consists of a small set of examples containing:
 The dataset is intentionally small and designed to illustrated evaluation stucture rather than provide a comprehensive benchmarkk.
 
 ## Example Dataset Entries
-| claim _ limitation | reference_excerpt | ground_truth
+| claim _ limitation | reference_excerpt | human_review |
 | :--- | :--- | :--- |
 | trasnmitting a signal | the device sends a wireless message to a remote receiver | discloses |
 | encrypting data | the system compresses files before storage | does not disclose |
