@@ -26,3 +26,6 @@ Predictions are compared against the ground truth labels.
 
 ## Goal
 The goal of this little experiment is to explore how LLMs perform on legal reasoning tasks, where plausible language overlap does not necessarily correspond to legal disclosure.
+
+## Notes
+This is a small prototype experiment intended to explore evaluation structure for legla AI tasks rather than provide a production-scale benchmark.
