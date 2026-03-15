@@ -15,7 +15,7 @@ The dataset is intentionally small and designed to illustrated evaluation stuctu
 ## Example Dataset Entries
 | claim _ limitation | reference_excerpt | human_review |
 | :--- | :--- | :--- |
-| trasnmitting a signal | the device sends a wireless message to a remote receiver | discloses |
+| transmitting a signal | the device sends a wireless message to a remote receiver | discloses |
 | encrypting data | the system compresses files before storage | does not disclose |
 | storing credentials | user credentials are saved in memory for later authentication | discloses |
 | generating a secure token | the server creates a random session identifier | partially discloses | 
