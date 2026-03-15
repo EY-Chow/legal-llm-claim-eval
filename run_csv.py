@@ -3,12 +3,14 @@ import os
 import re
 from openai import OpenAI
 
+# Configuration: Define files and the AI model version
 INPUT_CSV = "input.csv"
 OUTPUT_CSV = "output.csv"
 MODEL = "gpt-4.1-mini"
 
 client = OpenAI()
 
+# System Instructions: These set the "rules" for the AI's behavior
 INSTRUCTIONS = (
     "You are reviewing a patent claim limitation against a reference excerpt.\n"
     "Decide whether the excerpt discloses the limitation.\n"
@@ -20,6 +22,7 @@ INSTRUCTIONS = (
 )
 
 def norm(s: str) -> str:
+    """Removes messy whitespace and non-breaking space characters."""
     return " ".join((s or "").replace("\u00a0", " ").split()).strip()
 
 def parse_three_lines(text: str):
@@ -56,9 +59,11 @@ def parse_three_lines(text: str):
     return assessment, rationale, confidence
 
 def format_three_lines(assessment: str, rationale: str, confidence: str) -> str:
+    """Standardizes the final string for the spreadsheet output."""
     return f"Assessment: {assessment}\nRationale: {rationale}\nConfidence: {confidence}"
 
 def call_model(prompt: str) -> str:
+    """Executes the API call to OpenAI with temperature 0 for consistency."""
     resp = client.responses.create(
         model=MODEL,
         instructions=INSTRUCTIONS,
@@ -69,9 +74,11 @@ def call_model(prompt: str) -> str:
     return getattr(resp, "output_text", "").strip()
 
 def main():
+    # 1. VALIDATION: Ensure the API key is present
     if not os.getenv("OPENAI_API_KEY"):
         raise RuntimeError("OPENAI_API_KEY is not set")
-
+        
+    # 2. FILE LOADING: Read the CSV and clean up column names
     with open(INPUT_CSV, "r", encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
         if not reader.fieldnames:
@@ -90,7 +97,7 @@ def main():
     if not rows:
         raise RuntimeError("CSV contains no data rows")
 
-    # Drop fully-empty junk rows
+    # 3. DATA CLEANING: Filter out empty rows
     rows = [
         r for r in rows
         if (r.get("row_id") or "").strip()
@@ -98,6 +105,7 @@ def main():
         or (r.get("prior_art_excerpt") or "").strip()
     ]
 
+    # Check for required column headers
     required_columns = {
         "row_id",
         "claim_limitation",
@@ -118,7 +126,8 @@ def main():
     fieldnames = list(rows[0].keys())
     if "ai_raw" not in fieldnames:
         fieldnames.append("ai_raw")
-
+        
+    # 4. MAIN LOOP: Process each row in the spreadsheet
     for row in rows:
         claim = norm(row.get("claim_limitation", ""))
         excerpt = norm(row.get("prior_art_excerpt", ""))
@@ -134,7 +143,7 @@ def main():
         raw1 = call_model(base_prompt)
         a, r, c = parse_three_lines(raw1)
 
-        # If missing anything, do one corrective re-ask that focuses ONLY on missing fields
+        # 5. RETRY LOGIC: If the AI failed to follow the 3-line format, try one more time
         if not (a and r and c):
             missing_parts = []
             if not a:
@@ -143,7 +152,8 @@ def main():
                 missing_parts.append("Rationale")
             if not c:
                 missing_parts.append("Confidence")
-
+                
+            # Explicitly tell the AI what it forgot
             correction = (
                 f"You omitted: {', '.join(missing_parts)}.\n"
                 "Return EXACTLY three lines with all fields present:\n"
@@ -166,12 +176,13 @@ def main():
         else:
             row["ai_raw"] = raw1
 
-        # Final fallback if still incomplete
+        # 6. FINAL STORAGE: Save results into the row dictionary
         if not (a and r and c):
             row["ai_assessment"] = "REQUIRES HUMAN REVIEW: missing fields after retry"
         else:
             row["ai_assessment"] = format_three_lines(a, r, c)
 
+    # 7. EXPORT: Write all processed rows to the new CSV
     with open(OUTPUT_CSV, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
