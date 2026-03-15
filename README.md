@@ -8,7 +8,7 @@ The goal is to explore failure modes in LLM-assisted legal analytis, particularl
 The dataset consists of a small set of examples containing:
 * a patent claim limitation
 * a reference excerpt
-* a ground truth lable indicating whether the excert discloses the limitation
+* a ground truth table indicating whether the excerpt discloses the limitation
 
 The dataset is intentionally small and designed to illustrated evaluation stucture rather than provide a comprehensive benchmarkk.
 
