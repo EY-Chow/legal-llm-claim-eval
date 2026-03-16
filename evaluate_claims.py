@@ -33,28 +33,26 @@ def parse_three_lines(text: str):
     text = (text or "").strip()
 
     def grab(label: str) -> str:
-        # Match "Label: ..." up to end of line
         m = re.search(rf"(?im)^{re.escape(label)}\s*:\s*(.+?)\s*$", text)
         return m.group(1).strip() if m else ""
 
-    assessment = grab("Assessment")
-    rationale = grab("Rationale")
-    confidence = grab("Confidence")
+    assessment = grab("Assessment").lower().strip()
+    rationale = grab("Rationale").strip()
+    confidence = grab("Confidence").lower().strip()
 
-    # Normalize common variants
-    assessment = assessment.lower()
-    confidence = confidence.lower()
+    # Exact allowed values only
+    valid_assessments = {
+        "discloses",
+        "partially discloses",
+        "does not disclose",
+    }
+    valid_confidence = {"low", "medium", "high"}
 
-    # Keep only allowed values if they appear inside longer text
-    for val in ["discloses", "partially discloses", "does not disclose"]:
-        if val in assessment:
-            assessment = val
-            break
+    if assessment not in valid_assessments:
+        assessment = ""
 
-    for val in ["low", "medium", "high"]:
-        if val in confidence:
-            confidence = val
-            break
+    if confidence not in valid_confidence:
+        confidence = ""
 
     return assessment, rationale, confidence
 
@@ -142,45 +140,17 @@ def main():
         # First call
         raw1 = call_model(base_prompt)
         a, r, c = parse_three_lines(raw1)
-
-        # 5. RETRY LOGIC: If the AI failed to follow the 3-line format, try one more time
-        if not (a and r and c):
-            missing_parts = []
-            if not a:
-                missing_parts.append("Assessment")
-            if not r:
-                missing_parts.append("Rationale")
-            if not c:
-                missing_parts.append("Confidence")
-                
-            # Explicitly tell the AI what it forgot
-            correction = (
-                f"You omitted: {', '.join(missing_parts)}.\n"
-                "Return EXACTLY three lines with all fields present:\n"
-                "Assessment: <discloses | partially discloses | does not disclose>\n"
-                "Rationale: <1–2 sentences based only on the excerpt>\n"
-                "Confidence: <low | medium | high>\n\n"
-                + base_prompt
-            )
-
-            raw2 = call_model(correction)
-            raw_final = raw2.strip() if raw2.strip() else raw1
-            a2, r2, c2 = parse_three_lines(raw_final)
-
-            # Prefer filled fields from retry; fall back to any we got initially
-            a = a2 or a
-            r = r2 or r
-            c = c2 or c
-
-            row["ai_raw"] = raw_final
-        else:
-            row["ai_raw"] = raw1
+       
+        row["ai_raw"] = raw1
 
         # 6. FINAL STORAGE: Save results into the row dictionary
-        if not (a and r and c):
-            row["ai_assessment"] = "REQUIRES HUMAN REVIEW: missing fields after retry"
+        if not a:
+            row["ai_assessment"] = "REQUIRES HUMAN REVIEW: missing assessment"
         else:
-            row["ai_assessment"] = format_three_lines(a, r, c)
+            row["ai_assessment"] = format_three_lines(
+            a, 
+            r if r else "[missing rationale]", 
+            c if c else "[missing confidence]")
 
     # 7. EXPORT: Write all processed rows to the new CSV
     with open(OUTPUT_CSV, "w", encoding="utf-8", newline="") as f:
