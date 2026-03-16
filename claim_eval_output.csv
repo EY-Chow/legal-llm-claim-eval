@@ -1,0 +1,51 @@
+row_id,claim_limitation,prior_art_excerpt,ai_assessment,human_review,notes,ai_raw
+1,Vehicle includes a liquid supply system with a dashboard-mounted dispenser,Vehicle stores drinking water in a container located in the trunk and dispenses water through an outlet for passenger use,"Assessment: does not disclose
+Rationale: The excerpt mentions a liquid supply system with a container in the trunk and an outlet for dispensing water, but does not specify that the dispenser is mounted on the dashboard.
+Confidence: high",,,"Assessment: does not disclose  
+Rationale: The excerpt mentions a liquid supply system with a container in the trunk and an outlet for dispensing water, but does not specify that the dispenser is mounted on the dashboard.  
+Confidence: high"
+2,Liquid reservoir disposed within the vehicle structure,Drinking water container located in the trunk compartment of the vehicle,"Assessment: partially discloses
+Rationale: The excerpt indicates the drinking water container is in the trunk compartment, which is part of the vehicle structure, but it does not explicitly confirm the reservoir is integrated or disposed within the vehicle structure itself.
+Confidence: medium",,,"Assessment: partially discloses  
+Rationale: The excerpt indicates the drinking water container is in the trunk compartment, which is part of the vehicle structure, but it does not explicitly confirm the reservoir is integrated or disposed within the vehicle structure itself.  
+Confidence: medium"
+3,Fluid connection between reservoir and liquid dispenser,Water is delivered from the container to a dispensing outlet accessible to passengers,"Assessment: partially discloses
+Rationale: The excerpt indicates water delivery from a container to a dispensing outlet, implying a fluid connection, but does not explicitly describe the connection between a reservoir and a liquid dispenser.
+Confidence: medium",,,"Assessment: partially discloses  
+Rationale: The excerpt indicates water delivery from a container to a dispensing outlet, implying a fluid connection, but does not explicitly describe the connection between a reservoir and a liquid dispenser.  
+Confidence: medium"
+4,Thermoelectric element configured to heat or cool liquid prior to dispensing,Reference describes dispensing drinking water in a container with ice ,"Assessment: does not disclose
+Rationale: The excerpt only mentions dispensing drinking water with ice, which implies cooling by ice but does not describe a thermoelectric element configured to heat or cool the liquid prior to dispensing.
+Confidence: high",,,"Assessment: does not disclose  
+Rationale: The excerpt only mentions dispensing drinking water with ice, which implies cooling by ice but does not describe a thermoelectric element configured to heat or cool the liquid prior to dispensing.  
+Confidence: high"
+5,Transmitting a signal,The device sends a wireless message to a remote receiver,"Assessment: discloses
+Rationale: The excerpt states that the device sends a wireless message, which is equivalent to transmitting a signal.
+Confidence: high",,,"Assessment: discloses  
+Rationale: The excerpt states that the device sends a wireless message, which is equivalent to transmitting a signal.  
+Confidence: high"
+6,encrypting data,The system compresses files before storage,"Assessment: does not disclose
+Rationale: The excerpt only mentions compressing files and does not mention encrypting data.
+Confidence: high",,,"Assessment: does not disclose  
+Rationale: The excerpt only mentions compressing files and does not mention encrypting data.  
+Confidence: high"
+7,storing credentials,user credentials are saved in memory for later authentication,"Assessment: discloses
+Rationale: The excerpt explicitly states that user credentials are saved in memory, which corresponds directly to storing credentials.
+Confidence: high",,,"Assessment: discloses  
+Rationale: The excerpt explicitly states that user credentials are saved in memory, which corresponds directly to storing credentials.  
+Confidence: high"
+8,generating a secure token,the server creates a random session identifier,"Assessment: partially discloses
+Rationale: The excerpt mentions creating a random session identifier, which may serve as a token, but it does not specify that the token is secure.
+Confidence: medium",,,"Assessment: partially discloses  
+Rationale: The excerpt mentions creating a random session identifier, which may serve as a token, but it does not specify that the token is secure.  
+Confidence: medium"
+9,A coffee mug comprising a heat-sensitive outer coating that changes color at 150°F.,A ceramic mug with a heat-sensitive outer coating that changes colors at 100°F,"Assessment: does not disclose
+Rationale: The excerpt specifies a color change at 100°F, which does not meet the claimed 150°F temperature requirement.
+Confidence: high",,,"Assessment: does not disclose  
+Rationale: The excerpt specifies a color change at 100°F, which does not meet the claimed 150°F temperature requirement.  
+Confidence: high"
+10,A video transcoder configured to automatically adjust the output bitrate based on real-time network latency,A video transcoder that adjusts the output bitrate depending on the total file size requested by a user,"Assessment: does not disclose
+Rationale: The excerpt describes adjusting bitrate based on file size requested, not based on real-time network latency.
+Confidence: high",,,"Assessment: does not disclose  
+Rationale: The excerpt describes adjusting bitrate based on file size requested, not based on real-time network latency.  
+Confidence: high"
